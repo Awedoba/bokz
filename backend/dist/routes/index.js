@@ -1,4 +1,5 @@
 export { default as authRouter } from './auth/auth.routes.js';
 export { default as bookRouter } from './books/book.routes.js';
 export { default as collectionRouter } from './collections/collection.routes.js';
+export { default as readerRouter } from './reader/reader.routes.js';
 //# sourceMappingURL=index.js.map

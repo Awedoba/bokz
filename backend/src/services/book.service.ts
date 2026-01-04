@@ -1,8 +1,9 @@
 import fs from 'fs/promises';
 import path from 'path';
-import EPub from 'epub2';
-// @ts-ignore
-import pdf from 'pdf-parse';
+import { EPub } from 'epub2';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const pdf = require('pdf-parse');
 import sharp from 'sharp';
 import { nanoid } from 'nanoid';
 import { db } from '../db/index.js';

@@ -24,10 +24,16 @@ const io = new SocketServer(httpServer, {
 // MIDDLEWARE
 // ============================================
 
-app.use(cors({
+const corsOptions = {
     origin: config.cors.origin,
     credentials: true,
-}));
+};
+
+console.log('Allowed CORS Origins:', config.cors.origin);
+
+app.use(cors(corsOptions));
+// Enable pre-flight across-the-board
+app.options(/(.*)/, cors(corsOptions));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));

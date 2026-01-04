@@ -5,7 +5,7 @@ import { createServer } from 'http';
 import { Server as SocketServer } from 'socket.io';
 import { config } from './config/index.js';
 import { errorHandler, notFound } from './middleware/index.js';
-import { authRouter, bookRouter } from './routes/index.js';
+import { authRouter, bookRouter, collectionRouter, readerRouter } from './routes/index.js';
 // Initialize Express app
 const app = express();
 const httpServer = createServer(app);
@@ -48,6 +48,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/books', bookRouter);
 app.use('/api/collections', collectionRouter);
+app.use('/api/reader', readerRouter);
 // Serve uploads
 app.use('/uploads', express.static(config.upload.dir));
 // TODO: Add more routes as implemented

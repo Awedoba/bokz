@@ -134,7 +134,7 @@ async function handleLogin() {
 
   try {
     // Call backend API
-    const response = await $fetch('/auth/login', {
+    const response = await $fetch('api/auth/login', {
       method: 'POST',
       baseURL: config.public.apiBase,
       body: {
@@ -167,7 +167,7 @@ async function handleGuestLogin() {
   error.value = '';
 
   try {
-    const response = await $fetch('/auth/guest', {
+    const response = await $fetch('api/auth/guest', {
       method: 'POST',
       baseURL: config.public.apiBase,
       onResponseError({ response }) {
