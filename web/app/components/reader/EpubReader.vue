@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch, computed } from 'vue';
 import ePub from 'epubjs';
 import { useReaderStore } from '~/stores/reader';
 
@@ -37,12 +37,20 @@ const props = defineProps({
   annotations: { type: Array, default: () => [] },
 });
 
-const emit = defineEmits(['ready', 'relocated', 'selection']);
+const emit = defineEmits(['ready', 'relocated', 'selection', 'update:toc', 'page-change']);
 const readerStore = useReaderStore();
 
 const book = ref(null);
 const rendition = ref(null);
 const loading = ref(true);
+const rotation = ref(0);
+const zoomScale = ref(100); // 100%
+
+// Exposed state
+const toc = ref([]);
+const currentCfi = ref('');
+const currentPage = ref(1);
+const totalPages = ref(0);
 
 onMounted(async () => {
   loading.value = true;
@@ -53,6 +61,10 @@ onMounted(async () => {
     
     // Wait for book to be ready
     await book.value.ready;
+    
+    // Get TOC
+    toc.value = book.value.navigation.toc;
+    emit('update:toc', toc.value);
 
     // Render to element
     rendition.value = book.value.renderTo('epub-viewer', {
@@ -72,6 +84,12 @@ onMounted(async () => {
 
     rendition.value.on('selected', (cfiRange, contents) => {
       handleSelection(cfiRange, contents);
+    });
+
+    // Generate locations for pagination (Async)
+    book.value.locations.generate(1000).then(() => {
+       totalPages.value = book.value.locations.total;
+       updateCurrentPage();
     });
 
     // Render annotations
@@ -94,18 +112,70 @@ function handleSelection(cfiRange, contents) {
   // Add highlight immediately for feedback
   rendition.value.annotations.add('highlight', cfiRange);
   contents.window.getSelection().removeAllRanges();
-  
-  // Emit event to parent to handle "Save Annotation" UI
   emit('selection', cfiRange);
 }
 
-// Expose method to add annotation visually from parent
+function updateCurrentPage() {
+    if (!book.value || !currentCfi.value) return;
+    try {
+        const page = book.value.locations.locationFromCfi(currentCfi.value);
+        if (page) currentPage.value = page;
+    } catch (e) { /* ignore */ }
+}
+
+// --- Exposed Methods ---
+
 function addAnnotation(type, cfiRange) {
    rendition.value?.annotations.add(type, cfiRange);
 }
 
+function prevPage() {
+  rendition.value?.prev();
+}
+
+function nextPage() {
+  rendition.value?.next();
+}
+
+function goTo(href) {
+    rendition.value?.display(href);
+}
+
+function rotate(angle) {
+    // We update rotation ref, style will handle it
+    rotation.value = (rotation.value + angle) % 360;
+}
+
+function zoom(amount) {
+    // For Fixed Layout usually, but let's just adjust font size for reflowable for now as "zoom"
+    // Or actual CSS zoom
+    const newSize = readerStore.settings.fontSize + amount;
+    readerStore.updateSettings({ fontSize: newSize });
+}
+
+function search(query) {
+    // Basic search implementation using Spine
+    // This is expensive, better done via backend worker or index
+    return Promise.all(
+        book.value.spine.spineItems.map(item => 
+            item.load(book.value.load.bind(book.value))
+            .then(item.find.bind(item, query))
+            .finally(item.unload.bind(item))
+        )
+    ).then(results => [].concat.apply([], results));
+}
+
 defineExpose({
-  addAnnotation
+  addAnnotation,
+  prevPage,
+  nextPage,
+  goTo,
+  rotate,
+  zoom,
+  search,
+  toc,
+  currentPage,
+  totalPages
 });
 
 
@@ -118,17 +188,13 @@ onUnmounted(() => {
 function handleRelocated(location) {
   const percentage = location.start.percentage;
   const cfi = location.start.cfi;
+  currentCfi.value = cfi;
+  
+  updateCurrentPage();
   
   readerStore.saveProgress(props.bookId, cfi, percentage * 100);
   emit('relocated', { cfi, percentage });
-}
-
-function prevPage() {
-  rendition.value?.prev();
-}
-
-function nextPage() {
-  rendition.value?.next();
+  emit('page-change', { page: currentPage.value, total: totalPages.value, percentage });
 }
 
 // Watch for theme/font changes
@@ -152,6 +218,13 @@ function applySettings() {
   rendition.value.themes.select(theme);
 }
 </script>
+
+<style scoped>
+#epub-viewer {
+    transition: transform 0.3s ease;
+    transform: rotate(v-bind(rotation + 'deg')) scale(v-bind(zoomScale / 100));
+}
+</style>
 
 <style>
 /* Override epubjs iframe constraints if necessary */

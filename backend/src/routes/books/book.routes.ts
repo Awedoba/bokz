@@ -54,6 +54,29 @@ router.get(
 );
 
 /**
+ * GET /api/books/discover
+ * Get books for discovery (trending, recent, etc.)
+ */
+router.get(
+    '/discover',
+    authenticate,
+    asyncHandler(async (req: Request, res: Response) => {
+        // For now, just return recent books. In future, implement trending logic.
+        const recent = await BookService.getBooks(req.user!.id, {
+            limit: 10,
+            offset: 0
+            // TODO: Add sort by createdAt desc to Service if not default (it is default)
+        });
+
+        // We can add more sections like "random" or "suggested" here
+        res.json({
+            recent: recent,
+            trending: recent // Mocking trending as recent for now
+        });
+    })
+);
+
+/**
  * GET /api/books/:id
  * Get book details
  */
