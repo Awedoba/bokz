@@ -10,7 +10,7 @@ import { useAuthStore } from '~/stores/auth';
 const authStore = useAuthStore();
 
 // Initialize auth on app mount
-onMounted(() => {
-  authStore.initAuth();
-});
+// onMounted(() => {
+//   authStore.initAuth();
+// });
 </script>

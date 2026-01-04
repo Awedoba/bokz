@@ -60,7 +60,7 @@ const rate = ref(1);
 const pitch = ref(1);
 const selectedVoiceIndex = ref(0);
 
-const voice = computed(() => voices.value[selectedVoiceIndex.value] || undefined);
+const voice = ref(undefined);
 const textSource = computed(() => props.text);
 
 const { 
@@ -73,6 +73,12 @@ const {
   voice,
   rate,
   pitch,
+});
+
+watch([voices, selectedVoiceIndex], () => {
+  if (voices.value && voices.value.length > 0) {
+    voice.value = voices.value[selectedVoiceIndex.value];
+  }
 });
 
 watch(() => props.text, (newText) => {

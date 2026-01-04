@@ -150,7 +150,10 @@ async function handleLogin() {
       authStore.setUser(response.user);
       authStore.setToken(response.tokens.accessToken);
       // Save token for SSR
-      const tokenCookie = useCookie('accessToken');
+      const tokenCookie = useCookie('accessToken', {
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: '/'
+      });
       tokenCookie.value = response.tokens.accessToken;
       
       router.push('/');
@@ -179,7 +182,10 @@ async function handleGuestLogin() {
       authStore.setUser(response.user);
       authStore.setToken(response.tokens.accessToken);
       
-      const tokenCookie = useCookie('accessToken');
+      const tokenCookie = useCookie('accessToken', {
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: '/'
+      });
       tokenCookie.value = response.tokens.accessToken;
       
       router.push('/');

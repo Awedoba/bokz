@@ -77,7 +77,7 @@
             <!-- Login Button (if guest/not logged in) -->
             <NuxtLink 
               v-else 
-              to="/auth/login"
+              to="/login"
               class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800"
             >
               Log in
@@ -108,7 +108,7 @@
         </ul>
         
         <!-- Collections Section -->
-        <CollectionList />
+        <LibraryCollectionList />
 
       </div>
     </aside>
@@ -148,11 +148,12 @@ async function logout() {
   const { error } = await useFetch('/api/auth/logout', {
     method: 'POST',
     baseURL: useRuntimeConfig().public.apiBase,
+    headers: { Authorization: `Bearer ${authStore.accessToken}` }
   })
   
   if (!error.value) {
     authStore.clearAuth()
-    navigateTo('/auth/login')
+    navigateTo('/login')
   }
 }
 </script>

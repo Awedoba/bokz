@@ -105,7 +105,7 @@ async function handleRegister() {
   error.value = '';
 
   try {
-    const response = await $fetch('/auth/register', {
+    const response = await $fetch('api/auth/register', {
       method: 'POST',
       baseURL: config.public.apiBase,
       body: {

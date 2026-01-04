@@ -6,7 +6,7 @@ import { Server as SocketServer } from 'socket.io';
 
 import { config } from './config/index.js';
 import { errorHandler, notFound } from './middleware/index.js';
-import { authRouter, bookRouter, collectionRouter, readerRouter } from './routes/index.js';
+import { authRouter, bookRouter, collectionRouter, readerRouter, annotationRouter, analyticsRouter, settingsRouter } from './routes/index.js';
 
 // Initialize Express app
 const app = express();
@@ -69,11 +69,9 @@ app.use('/api/reader', readerRouter);
 // Serve uploads
 app.use('/uploads', express.static(config.upload.dir));
 
-// TODO: Add more routes as implemented
-// app.use('/api/collections', collectionsRouter);
-// app.use('/api/annotations', annotationsRouter);
-// app.use('/api/analytics', analyticsRouter);
-// app.use('/api/settings', settingsRouter);
+app.use('/api/annotations', annotationRouter);
+app.use('/api/analytics', analyticsRouter);
+app.use('/api/settings', settingsRouter);
 
 // ============================================
 // ERROR HANDLING

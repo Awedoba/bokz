@@ -97,8 +97,8 @@ import { useBookStore } from '~/stores/books'
 definePageMeta({
   middleware: (to, from) => {
     const auth = useAuthStore()
-    if (!auth.isAuthenticated && to.path !== '/auth/login' && to.path !== '/auth/register') {
-      return navigateTo('/auth/login')
+    if (!auth.isAuthenticated && to.path !== '/login' && to.path !== '/register') {
+      return navigateTo('/login')
     }
   }
 })
