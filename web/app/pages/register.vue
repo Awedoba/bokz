@@ -9,7 +9,7 @@
       </h2>
       <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
         Already have an account?
-        <NuxtLink to="/auth/login" class="font-medium text-purple-600 hover:text-purple-500 dark:text-purple-400">
+        <NuxtLink to="/login" class="font-medium text-purple-600 hover:text-purple-500 dark:text-purple-400">
           Sign in here
         </NuxtLink>
       </p>
