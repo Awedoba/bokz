@@ -1,0 +1,29 @@
+// Provide a fallback 'flutter' configuration map so plugin modules can
+// read compile/min/target SDK values during evaluation if the Flutter
+// Gradle extension isn't available yet.
+ext.flutter = [
+    compileSdkVersion: 33,
+    minSdkVersion: 21,
+    targetSdkVersion: 33,
+    versionCode: 1,
+    versionName: '1.0.0'
+]
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = "../build"
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(":app")
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}

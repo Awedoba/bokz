@@ -1,0 +1,108 @@
+name: readease
+description: "A multi-platform reading app supporting PDF, EPUB, and audiobooks with offline-first sync and AI features"
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Routing
+  go_router: any
+
+  # State Management
+  riverpod: any
+  hooks_riverpod: any
+  flutter_hooks: any
+
+  # Local Storage
+  drift: any
+  sqlite3_flutter_libs: any
+  path_provider: any
+  path: any
+
+  # Content Viewers
+  pdfx: ^2.6.0
+  epub_view: ^3.2.0
+  epubx: ^4.0.0
+
+  # Audio
+  just_audio: any
+  audio_service: any
+  audio_session: any
+
+  # Features
+  flutter_tts: any
+  flutter_local_notifications: any
+  file_picker: any
+  share_plus: any
+  image_picker: any
+  shimmer: ^3.0.0
+
+  # Auth & Security
+  firebase_auth: any
+  google_sign_in: any
+  flutter_secure_storage: any
+
+  # Networking & Background Tasks
+  dio: any
+  workmanager: any
+  connectivity_plus: any
+
+  # UI/UX
+  cupertino_icons: any
+  iconsax: any
+  google_fonts: any
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  golden_toolkit: any
+  drift_dev: any
+  build_runner: any
+  flutter_lints: any
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  # assets:
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package
